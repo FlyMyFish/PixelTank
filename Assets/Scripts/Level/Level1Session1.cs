@@ -61,7 +61,6 @@ namespace Level
             _bornPosition.Add(new Vector3(15, 25, 0));
             _bornPosition.Add(new Vector3(0, 25, 0));
             aiEnemy.tag = "Enemy";
-            GameSessionController.GetInstance().Register(this);
             OnSessionStart?.Invoke();
         }
 
@@ -135,5 +134,11 @@ namespace Level
         public MonoBehaviour GetContext() => this;
 
         public Vector3 PlayerBornPoint() => new Vector3(0, 1, 0);
+
+        public void DestroySession()
+        {
+            gameObject.SetActive(false);
+            Destroy(this);
+        }
     }
 }

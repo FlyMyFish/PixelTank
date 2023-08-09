@@ -18,5 +18,7 @@ namespace Level
         MonoBehaviour GetContext();
 
         Vector3 PlayerBornPoint();
+
+        void DestroySession();
     }
 }
