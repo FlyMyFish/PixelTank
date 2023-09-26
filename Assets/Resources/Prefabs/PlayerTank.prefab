@@ -536,7 +536,7 @@ MonoBehaviour:
   engineMedium: {fileID: 4159004327073633522}
   engineHeavy: {fileID: 4159004325868409968}
   foreBox: {fileID: 4159004326987757271}
-  lifeBar: {fileID: 4159004326520262905}
+  lifeBar: {fileID: 4159004326564772726}
 --- !u!1 &4159004325868409968
 GameObject:
   m_ObjectHideFlags: 0

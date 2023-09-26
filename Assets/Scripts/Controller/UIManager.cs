@@ -34,6 +34,7 @@ namespace Controller
                     //NextLevel
                 }
             };
+            displayKilledCount.text = "0";
         }
 
         // Update is called once per frame

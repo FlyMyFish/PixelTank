@@ -22,7 +22,6 @@ namespace Controller
 
         public void SetTrigger(string trigger)
         {
-            Debug.Log($"SetTrigger: {trigger}");
             _leftAnim.SetTrigger(trigger);
             _rightAnim.SetTrigger(trigger);
         }

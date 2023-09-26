@@ -2,32 +2,34 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Controller;
-using Factory;
 using UnityEngine;
-using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace Level
 {
     public class Level1Session1 : MonoBehaviour, ILevelSession
     {
-        [FormerlySerializedAs("_walls")] public List<GameObject> walls;
+        public List<GameObject> walls;
         public GameObject bornPointPrefabs;
         private readonly List<int> _wallIndex = new List<int>();
         private readonly List<Vector3> _wallPositions = new List<Vector3>();
         private LevelCreator _levelCreator;
-        private const int MaxEnemy = 20;
-        private int _leftEnemy = 20; //出生过的坦克数量
+        private const int MaxEnemy = 10;
+        private int _leftEnemy = 10; //出生过的坦克数量
         private int _curEnemyCount; //当前活动中的坦克数量；
         private int _killedEnemyCount; //损毁的坦克数量
         public event Action OnSessionStart;
         public event Action OnSessionEnd;
-        private List<IBornPoint> _bornPoints = new List<IBornPoint>();
-        private List<Vector3> _bornPosition = new List<Vector3>();
+        private readonly List<IBornPoint> _bornPoints = new List<IBornPoint>();
+        private readonly List<Vector3> _bornPosition = new List<Vector3>();
 
-        [FormerlySerializedAs("AiEnemy")] public GameObject aiEnemy;
+        private readonly List<GameObject> _enemyTanks = new List<GameObject>();
 
         private void Awake()
         {
+            _enemyTanks.Add(Resources.Load<GameObject>("Prefabs/EnemyGreenTank"));
+            _enemyTanks.Add(Resources.Load<GameObject>("Prefabs/EnemyOrangeTank"));
+            _enemyTanks.Add(Resources.Load<GameObject>("Prefabs/EnemyYellowTank"));
             for (var j = 4; j < 25; j++)
             {
                 if (j % 4 == 0)
@@ -60,7 +62,6 @@ namespace Level
             _bornPosition.Add(new Vector3(-15, 25, 0));
             _bornPosition.Add(new Vector3(15, 25, 0));
             _bornPosition.Add(new Vector3(0, 25, 0));
-            aiEnemy.tag = "Enemy";
             OnSessionStart?.Invoke();
         }
 
@@ -83,7 +84,9 @@ namespace Level
                     foreach (var bornPoint in _bornPoints)
                     {
                         if (!bornPoint.NoTankInPoint() || _leftEnemy <= 0) continue;
-                        Instantiate(aiEnemy, bornPoint.PointPosition(), Quaternion.identity).transform.parent =
+                        var tankIndex = Random.Range(0, 10) % 3;
+                        Instantiate(_enemyTanks[tankIndex], bornPoint.PointPosition(), Quaternion.identity).transform
+                                .parent =
                             transform;
                         _curEnemyCount++;
                         _leftEnemy--;
@@ -117,7 +120,8 @@ namespace Level
                     (session = gameObject).SetActive(false);
                     Destroy(session);
                 }
-            }else if (o.CompareTag("Player"))
+            }
+            else if (o.CompareTag("Player"))
             {
                 GameSessionController.GetInstance().GameOver();
             }
@@ -139,6 +143,12 @@ namespace Level
         {
             gameObject.SetActive(false);
             Destroy(this);
+        }
+
+        public void Reset()
+        {
+            _curEnemyCount = 0;
+            _killedEnemyCount = 0;
         }
     }
 }

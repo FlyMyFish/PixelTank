@@ -8,34 +8,31 @@ namespace Controller
     public class GameSessionController
     {
         private static GameSessionController _instance;
-        private GameObject _curSessionPrefab;
+        private readonly GameObject _curSessionPrefab;
         private GameObject _curSessionObj;
         private ILevelSession _curSession;
-        private GameObject Player;
+        private readonly GameObject _player;
         public event Action<bool, int> OnSessionComplete;
 
         public static GameSessionController GetInstance()
         {
-            if (_instance == null)
-            {
-                _instance = new GameSessionController();
-            }
-
-            return _instance;
+            return _instance ??= new GameSessionController();
         }
 
         private GameSessionController()
         {
-            Player = Resources.Load<GameObject>("Prefabs/PlayerTank");
+            _player = Resources.Load<GameObject>("Prefabs/PlayerTank");
             _curSessionPrefab = Resources.Load<GameObject>("Sessions/Level1Session1");
             _curSession = _curSessionPrefab.gameObject.GetComponentInChildren<ILevelSession>();
+            _curSession.Reset();
         }
 
         public void Init()
         {
-            Object.Instantiate(Player, new Vector3(0, 1, 0), Quaternion.identity);
-            Player.transform.position = _curSession.PlayerBornPoint();
+            Object.Instantiate(_player, new Vector3(0, 1, 0), Quaternion.identity);
+            _player.transform.position = _curSession.PlayerBornPoint();
             _curSession.OnSessionEnd += () => { _curSession = null; };
+            _curSession.Reset();
             InitLevel();
         }
 
@@ -69,7 +66,9 @@ namespace Controller
             _curSessionObj.SetActive(false);
             Object.Destroy(_curSessionObj);
             Init();
-            if (Camera.main != null) Camera.main.gameObject.transform.position = new Vector3(_curSession.PlayerBornPoint().x,_curSession.PlayerBornPoint().x,-10);
+            if (Camera.main != null)
+                Camera.main.gameObject.transform.position = new Vector3(_curSession.PlayerBornPoint().x,
+                    _curSession.PlayerBornPoint().x, -10);
         }
     }
 }

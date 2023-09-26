@@ -20,5 +20,7 @@ namespace Level
         Vector3 PlayerBornPoint();
 
         void DestroySession();
+
+        void Reset();
     }
 }

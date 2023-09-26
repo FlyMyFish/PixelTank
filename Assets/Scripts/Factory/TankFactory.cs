@@ -15,7 +15,31 @@ namespace Factory
             return new TankItem(new LightArmor(), new LightWeapon(tank), new LightEngine());
         }
 
-        public static ITank CreateTankByParam(TankType armorType, TankType weaponType, TankType engineType,
+        public static ITank CreateTankByParam(int armorType, int weaponType, int engineType, MonoBehaviour tank)
+        {
+            return CreateTankByParam(armorType switch
+                {
+                    0 => TankType.Light,
+                    1 => TankType.Medium,
+                    2 => TankType.Heavy,
+                    _ => TankType.Light
+                }, weaponType switch
+                {
+                    0 => TankType.Light,
+                    1 => TankType.Medium,
+                    2 => TankType.Heavy,
+                    _ => TankType.Light
+                },
+                engineType switch
+                {
+                    0 => TankType.Light,
+                    1 => TankType.Medium,
+                    2 => TankType.Heavy,
+                    _ => TankType.Light
+                }, tank);
+        }
+
+        private static ITank CreateTankByParam(TankType armorType, TankType weaponType, TankType engineType,
             MonoBehaviour tank)
         {
             IArmor armor = armorType switch
