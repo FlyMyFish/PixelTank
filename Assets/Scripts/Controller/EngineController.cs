@@ -1,21 +1,31 @@
-using System;
 using UnityEngine;
 
 namespace Controller
 {
     public class EngineController : MonoBehaviour
     {
-        public AudioClip moveSound;
-        private AudioSource _audioSource;
+        public GameObject Left;
+        public GameObject Right;
 
-        private void Start()
+        private Animator _leftAnim, _rightAnim;
+
+        private void Awake()
         {
-            _audioSource = GetComponent<AudioSource>();
+            _leftAnim = Left.GetComponentInChildren<Animator>();
+            _rightAnim = Right.GetComponentInChildren<Animator>();
         }
 
         /*public void PlayMoveSound()
         {
             _audioSource.PlayOneShot(moveSound);
         }*/
+
+        public void SetTrigger(string trigger)
+        {
+            Debug.Log($"SetTrigger: {trigger}");
+            _leftAnim.SetTrigger(trigger);
+            _rightAnim.SetTrigger(trigger);
+        }
+
     }
 }

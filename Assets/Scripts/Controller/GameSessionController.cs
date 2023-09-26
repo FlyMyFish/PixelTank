@@ -26,14 +26,13 @@ namespace Controller
 
         private GameSessionController()
         {
-            Player = Resources.Load<GameObject>("Prefabs/Tank");
+            Player = Resources.Load<GameObject>("Prefabs/PlayerTank");
             _curSessionPrefab = Resources.Load<GameObject>("Sessions/Level1Session1");
             _curSession = _curSessionPrefab.gameObject.GetComponentInChildren<ILevelSession>();
         }
 
         public void Init()
         {
-            Player.tag = "Player";
             Object.Instantiate(Player, new Vector3(0, 1, 0), Quaternion.identity);
             Player.transform.position = _curSession.PlayerBornPoint();
             _curSession.OnSessionEnd += () => { _curSession = null; };

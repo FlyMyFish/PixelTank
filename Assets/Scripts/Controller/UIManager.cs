@@ -24,7 +24,10 @@ namespace Controller
                 if (!complete)
                 {
                     //展示gameOver界面与重开按钮
-                    gameOverPanel.SetActive(true);
+                    if (gameOverPanel != null)
+                    {
+                        gameOverPanel.SetActive(true);
+                    }
                 }
                 else
                 {
