@@ -111,6 +111,7 @@ namespace Level
         {
             if (o.CompareTag("Enemy"))
             {
+                CreateBox(o.transform.position);
                 _killedEnemyCount++;
                 _curEnemyCount--;
                 if (_curEnemyCount <= 0 && _leftEnemy <= 0)
@@ -124,6 +125,18 @@ namespace Level
             else if (o.CompareTag("Player"))
             {
                 GameSessionController.GetInstance().GameOver();
+            }
+        }
+
+        public void CreateBox(Vector3 position)
+        {
+            if (Random.Range(0, 100) > 10)
+            {
+                Debug.Log("CreateBox");
+
+                var obj = Resources.Load<GameObject>("Prefabs/UpgradeBox");
+                var boxPosition = new Vector3(position.x, position.y, 0);
+                Instantiate(obj, boxPosition, Quaternion.identity);
             }
         }
 

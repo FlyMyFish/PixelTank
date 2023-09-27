@@ -22,5 +22,7 @@ namespace Level
         void DestroySession();
 
         void Reset();
+
+        void CreateBox(Vector3 position);
     }
 }

@@ -60,7 +60,14 @@ namespace Controller
             _engineController = _curEngine.GetComponentInChildren<EngineController>();
             _weaponAnim = weapon.GetComponentInChildren<Animator>();
             _foreBox = foreBox.GetComponentInChildren<ForeBox>();
-            _foreBox.OnTriggerChanged += b => { _blocked = b; };
+            _foreBox.OnTriggerChanged += b =>
+            {
+                _blocked = b;
+                if (_blocked)
+                {
+                    RandomTurnAround();
+                }
+            };
             _lifeBarTransForm = lifeBar.transform;
             _armorAnim.SetInteger(Type, armorType);
             _weaponAnim.SetInteger(Type, weaponType);
@@ -74,9 +81,6 @@ namespace Controller
             {
                 Move();
             }
-
-            Debug.Log(
-                $"tankName:{gameObject.name}; armorType: {_armorAnim.GetInteger(Type)}; weaponType:{_weaponAnim.GetInteger(Type)}");
 
             _engineController.SetTrigger(_isRunning ? "Move" : "Idle");
             _lifeBarTransForm.localScale = new Vector3(_tank.CurrentLife() / _tank.MaxLife(), 0.2f, 1);

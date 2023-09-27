@@ -1,3 +1,4 @@
+using Basic;
 using Factory;
 using Item;
 using UnityEngine;
@@ -46,6 +47,9 @@ namespace Controller
                 (o = gameObject).SetActive(false);
                 Destroy(o);
             };
+            _tank.OnArmorUpGrade += OnArmorUpdate;
+            _tank.OnWeaponUpGrade += OnWeaponUpdate;
+            _tank.OnEngineUpGrade += OnEngineUpdate;
             _curEngine = engineLight;
             _armorAnim = armor.GetComponentInChildren<Animator>();
             _engineController = _curEngine.GetComponentInChildren<EngineController>();
@@ -53,6 +57,32 @@ namespace Controller
             _foreBox = foreBox.GetComponentInChildren<ForeBox>();
             _foreBox.OnTriggerChanged += b => { _blocked = b; };
             _lifeBarTransForm = lifeBar.transform;
+        }
+
+        private void OnEngineUpdate(int type)
+        {
+            _curEngine.SetActive(false);
+            if (type == 1)
+            {
+                _curEngine = engineMedium;
+            }
+            else if (type == 2)
+            {
+                _curEngine = engineHeavy;
+            }
+
+            _curEngine.SetActive(true);
+            _engineController = _curEngine.GetComponentInChildren<EngineController>();
+        }
+
+        private void OnArmorUpdate(int type)
+        {
+            _armorAnim.SetInteger(Type, type);
+        }
+
+        private void OnWeaponUpdate(int type)
+        {
+            _weaponAnim.SetInteger(Type, type);
         }
 
         void Start()
@@ -120,6 +150,11 @@ namespace Controller
                 var bulletItem = col.gameObject.GetComponent<BulletItem>();
                 _tank.TakenDamage(bulletItem.BulletDamage);
             }
+        }
+
+        public void OnTouchBox((int typeIndex, int weightIndex) boxConsumable)
+        {
+            _tank.UpGrade(BoxFactory.CreateBoxPrefab(boxConsumable, this));
         }
 
         private void OnDestroy()

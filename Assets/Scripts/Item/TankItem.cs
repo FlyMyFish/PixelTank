@@ -14,6 +14,10 @@ namespace Item
         private IEngine _engine, _mediumEngine, _heavyEngine;
         public event Action<IConsumable> OnEmpty;
         public event Action OnUpGrade;
+        public event Action<int> OnArmorUpGrade;
+        public event Action<int> OnWeaponUpGrade;
+        public event Action<int> OnEngineUpGrade;
+        
         public event Action Die;
 
         public TankItem(IArmor armor, IWeapon weapon, IEngine engine)
@@ -49,9 +53,11 @@ namespace Item
             {
                 case HeavyWeapon heavyWeapon:
                     _heavyWeapon = heavyWeapon;
+                    OnWeaponUpGrade?.Invoke(2);
                     break;
                 case MediumWeapon mediumWeapon:
                     _mediumWeapon = mediumWeapon;
+                    OnWeaponUpGrade?.Invoke(1);
                     break;
             }
         }
@@ -62,9 +68,11 @@ namespace Item
             {
                 case HeavyArmor heavyArmor:
                     _heavyArmor = heavyArmor;
+                    OnArmorUpGrade?.Invoke(2);
                     return;
                 case MediumArmor mediumArmor:
                     _mediumArmor = mediumArmor;
+                    OnArmorUpGrade?.Invoke(1);
                     return;
                 default:
                     _armor.Full(armor);
@@ -78,9 +86,11 @@ namespace Item
             {
                 case HeavyEngine heavyEngine:
                     _heavyEngine = heavyEngine;
+                    OnEngineUpGrade?.Invoke(2);
                     break;
                 case MediumEngine mediumEngine:
                     _mediumEngine = mediumEngine;
+                    OnEngineUpGrade?.Invoke(1);
                     break;
             }
         }

@@ -46,7 +46,6 @@ namespace Controller
 
         private void OnReStarClick()
         {
-            Debug.Log("OnReStarClick");
             GameSessionController.GetInstance().ReStar();
             gameOverPanel.SetActive(false);
         }
